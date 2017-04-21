@@ -1,28 +1,24 @@
 import { Component } from '@angular/core';
+import { PostsService, Post } from '../services/posts.service'
 
 @Component({
-  selector: 'user',
-  template: `<h1>Hello {{name}}</h1>
-  <p>
-  Email : {{email}}.<br />
-  Address : {{address.street}}, {{address.city}} ({{address.country}}).
-  </p>
-  <div>
-    <button (click)="toggleSkills()">{{showSkills ? "Hide skills" : "Show skills"}}</button>
-    <ul *ngIf="showSkills">
-        <li *ngFor="let skill of skills">{{skill}}</li>
-    </ul>
-  </div>`,
+    moduleId: module.id,
+    selector: 'user',
+    templateUrl: `user.component.html`,
+    providers: [PostsService]
 })
 export class UserComponent  { 
-    name: string; 
+    lastName: string;
+    firstName: string;
     email: string;
-    address: address;
+    address: Address;
     skills: string[];
     showSkills: boolean;
+    posts: Post[]
 
-    constructor () {
-        this.name = 'Thomas Maréchal';
+    constructor (private postsService: PostsService) {
+        this.firstName = 'Thomas';
+        this.lastName = 'Maréchal';
         this.email = 'thomas.marechal@meet-2.com';
         this.address = {
             street : 'Mauhin 6/c',
@@ -32,13 +28,25 @@ export class UserComponent  {
         
         this.showSkills = false;
         this.skills = [ 'Daddy', 'Soccer', 'MTB'];
+
+        this.postsService.getPosts().subscribe(posts => {
+            this.posts = posts;
+        })
     }
 
     toggleSkills() {
         this.showSkills = !this.showSkills;
     }
+
+    submitSkill(newSkill: string) {
+        this.skills.push(newSkill);
+    }
+
+    deletSkill(i: number) {
+        this.skills.splice(i, 1);
+    }
 }
-interface address {
+interface Address {
     street: string;
     city: string;
     country: string;
