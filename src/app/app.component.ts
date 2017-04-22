@@ -11,4 +11,10 @@ import { Component } from '@angular/core';
   </div>
   <router-outlet></router-outlet>`,
 })
-export class AppComponent  { }
+export class AppComponent  {
+  inElectron : boolean;
+
+  constructor() {
+    //this.inElectron = process.versions.electron != undefined;
+  }
+}
